@@ -23,13 +23,19 @@ class DictField(Field):
             pass
 
         def __repr__(self):
-            return f"<DictField, keys: {', '.join(self.keys())}>"
+            return f"<DictField, keys: {', '.join(map(str, self.keys()))}>"
 
         def __iter__(self):
             return iter(self.data)
 
         def __delitem__(self, key):
             del self.data[key]
+
+        def __bool__(self):
+            return bool(self.data)
+
+        def __dict__(self):
+            return self.data
 
         def dump(self):
             return msgpack.dumps(self.data)
@@ -42,6 +48,9 @@ class DictField(Field):
 
         def values(self):
             return self.data.values()
+
+        def dict(self):
+            return self.data
         pass
 
     def db_value(self, value: Union[Dict, dict]):
